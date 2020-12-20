@@ -14,6 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+Route::post('login', 'App\Http\Controllers\Api\Auth\LoginController@login');
+Route::post('register', 'App\Http\Controllers\UserController@register');
+
+Route::post('add/story','App\Http\Controllers\Api\StoriesController@make');
+Route::get('get/stories','App\Http\Controllers\Api\StoriesController@getAll');
+Route::delete('delete/story','App\Http\Controllers\Api\StoriesController@deleteStory');
+
+Route::post('add/publication','App\Http\Controllers\Api\PublicationsController@create');
+Route::get('get/publications','App\Http\Controllers\Api\PublicationsController@getAll');
+Route::delete('delete/publication','App\Http\Controllers\Api\PublicationsController@deletePublication');
+Route::post('download/publication','App\Http\Controllers\Api\PublicationsController@download');
+
+Route::post('add/image','App\Http\Controllers\Api\ImageGalleriesController@create');
+
+
+
