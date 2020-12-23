@@ -12,7 +12,7 @@ use Validator,Storage;
 
 class PublicationsController extends Controller
 {
-    public function getAll()
+    public function index()
     {
         try {
             $user = auth()->userOrFail();
@@ -29,7 +29,7 @@ class PublicationsController extends Controller
         return $publications;
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
@@ -115,30 +115,21 @@ class PublicationsController extends Controller
 
         return response()->json(['success'], 200);
     }
-    public function deletePublication(Request $request)
+    public function destroy($id)
     {
         try {
             $user = auth()->userOrFail();
         } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e){
             return response()->json(['error'=> $e->getMessage()]);
         }
-        $filename = Publications::where('id', $request['id'])->pluck('file');
-//        $explode = explode("/",$filename);
-//        $explode2 = explode("\"",$explode[7]);
-//
-//        $filename = $explode2[0];
-//        if(is_file($filename)){
-//            Storage::delete($filename);
-//        }
-//        else
-//        {
-//            return response()->json(['File does not exist'], 422);
-//        }
-        Publications::where('id', $request['id'])->delete();
-
-        return response()->json(['success'], 200);
-
+        $publication = Publications::where('id',$id)->first();
+        if ($publication != null) {
+            $publication->delete();
+            return response()->json(['success'], 200);
+        }
+        return response()->json(['wrong id'], 400);
     }
+
     public function download(Request $request){
         $count=Publications::where('id',$request['id'])->pluck('downloaded');
         $publ = Publications::find($request['id']);

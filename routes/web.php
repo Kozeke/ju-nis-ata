@@ -18,6 +18,4 @@ Route::get('/', function () {
 });
 //Route::get('file','App\Http\Controllers\Api\StoriesController@create');
 //Route::post('file','App\Http\Controllers\Api\StoriesController@make');
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+

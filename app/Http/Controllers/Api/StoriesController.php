@@ -16,7 +16,7 @@ class StoriesController extends Controller
     {
         return view('create');
     }
-    public function getAll()
+    public function index()
     {
         try {
             $user = auth()->userOrFail();
@@ -31,7 +31,7 @@ class StoriesController extends Controller
         return $stories;
     }
 
-    public function make(Request $request)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'content' => 'required',
@@ -109,8 +109,17 @@ class StoriesController extends Controller
 
 
     }
-    public function deleteStory(Request $request){
-        Stories::find($request['id'])->delete();
-        return response()->json(['success'], 200);
+    public function destroy($id){
+        try {
+            $user = auth()->userOrFail();
+        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e){
+            return response()->json(['error'=> $e->getMessage()]);
+        }
+        $story = Stories::where('id',$id)->first();
+        if ($story != null) {
+            $story->delete();
+            return response()->json(['success'], 200);
+        }
+        return response()->json(['wrong id'], 400);
     }
 }
